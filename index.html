@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAKE-UP — Студия уличных танцев | Уссурийск</title>
+    <meta name="description" content="Студия уличных танцев WAKE-UP в Уссурийске. Хип-хоп, фристайл, хореография. С 2016 года возделываем культуру уличного танца.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        darker: '#050505',
+                        white: '#ffffff',
+                        accent: '#d4a054',
+                        'accent-light': '#e8bf7a',
+                        'accent-dark': '#b8863a',
+                        muted: '#777777',
+                        'muted-dark': '#141414',
+                        'warm': '#f0e6e0',
+                        gold: '#d4a054',
+                    },
+                    fontFamily: {
+                        heading: ['Bebas Neue', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #fff; overflow-x: hidden; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+        /* Grain texture overlay */
+        .grain::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Hero animations */
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(5rem, 15vw, 14rem);
+            letter-spacing: 0.05em;
+            line-height: 0.9;
+            animation: heroIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(60px);
+        }
+        @keyframes heroIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-subtitle {
+            animation: fadeUp 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-line {
+            width: 60px;
+            height: 2px;
+            background: #fff;
+            animation: expandLine 1s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        @keyframes expandLine {
+            to { opacity: 1; transform: scaleX(1); }
+        }
+
+        .scroll-indicator {
+            animation: scrollBounce 2s ease-in-out infinite;
+        }
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Section reveal on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Image hover */
+        .img-hover {
+            overflow: hidden;
+        }
+        .img-hover img {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .img-hover:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Price card hover */
+        .price-card {
+            transition: all 0.3s ease;
+            border: 1px solid #1a1a1a;
+        }
+        .price-card:hover {
+            border-color: #333;
+            transform: translateY(-4px);
+            background: #111;
+        }
+
+        /* Nav blur */
+        .nav-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.8);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Glitch effect for title */
+        .glitch {
+            position: relative;
+        }
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+        .glitch:hover::before {
+            opacity: 0.8;
+            transform: translate(-2px, -1px);
+            color: #ff0000;
+            animation: glitch1 0.3s linear infinite;
+        }
+        .glitch:hover::after {
+            opacity: 0.8;
+            transform: translate(2px, 1px);
+            color: #0000ff;
+            animation: glitch2 0.3s linear infinite;
+        }
+        @keyframes glitch1 {
+            0%, 100% { clip-path: inset(30% 0 40% 0); }
+            50% { clip-path: inset(60% 0 10% 0); }
+        }
+        @keyframes glitch2 {
+            0%, 100% { clip-path: inset(10% 0 60% 0); }
+            50% { clip-path: inset(40% 0 20% 0); }
+        }
+
+        /* Marquee */
+        .marquee {
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Smooth anchor offset */
+        section[id] {
+            scroll-margin-top: 80px;
+        }
+    </style>
+</head>
+<body class="grain">
+
+    <!-- Navigation -->
+    <nav class="nav-blur fixed top-0 left-0 right-0 z-50 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="#hero" class="font-heading text-2xl tracking-widest hover:opacity-70 transition">WAKE-UP</a>
+                <div class="hidden md:flex items-center gap-8 text-sm text-muted">
+                    <a href="#about" class="hover:text-white transition uppercase tracking-wider">О нас</a>
+                    <a href="#directions" class="hover:text-white transition uppercase tracking-wider">Направления</a>
+                    <a href="#pricing" class="hover:text-white transition uppercase tracking-wider">Цены</a>
+                    <a href="#reviews" class="hover:text-white transition uppercase tracking-wider">Отзывы</a>
+                    <a href="#contact" class="hover:text-white transition uppercase tracking-wider">Контакты</a>
+                </div>
+                <button id="menuBtn" class="md:hidden text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-72 h-full bg-darker z-50 p-6">
+        <button id="closeMenu" class="absolute top-5 right-5 text-white">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+        <div class="mt-16 flex flex-col gap-6">
+            <a href="#about" class="mobile-link text-lg text-muted hover:text-white transition uppercase tracking-wider">О нас</a>
+            <a href="#directions" class="mobile-link text-lg text-muted hover:text-white transition uppercase tracking-wider">Направления</a>
+            <a href="#pricing" class="mobile-link text-lg text-muted hover:text-white transition uppercase tracking-wider">Цены</a>
+            <a href="#reviews" class="mobile-link text-lg text-muted hover:text-white transition uppercase tracking-wider">Отзывы</a>
+            <a href="#contact" class="mobile-link text-lg text-muted hover:text-white transition uppercase tracking-wider">Контакты</a>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background image -->
+        <div class="absolute inset-0">
+            <img src="images/studio.jpg"
+                 alt="Студия WAKE-UP"
+                 class="w-full h-full object-cover"
+                 loading="eager">
+            <div class="absolute inset-0 bg-gradient-to-b from-darker/70 via-darker/50 to-dark"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-dark/80 to-dark/30"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-4">
+            <p class="hero-subtitle text-sm sm:text-base uppercase tracking-[0.3em] text-muted mb-4">Студия уличных танцев · Уссурийск</p>
+            <h1 class="hero-title glitch text-white" data-text="WAKE-UP">
+                WAKE-<span class="inline-block border-b-4 border-white/30 pb-2">UP</span>
+            </h1>
+            <p class="hero-subtitle text-lg sm:text-xl text-white/70 mt-4 font-light max-w-xl mx-auto">
+                Осознанное творчество. Культура уличного танца. С 2016 года.
+            </p>
+            <div class="flex gap-4 justify-center mt-10 hero-subtitle">
+                <a href="#pricing" class="inline-flex items-center gap-2 bg-gold text-dark px-6 py-3 text-sm font-semibold uppercase tracking-wider hover:bg-accent-light transition">
+                    Начать заниматься
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+                <a href="#about" class="inline-flex items-center gap-2 border border-white/20 px-6 py-3 text-sm uppercase tracking-wider hover:border-white/50 hover:bg-white/5 transition">
+                    Узнать больше
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-indicator flex flex-col items-center gap-2">
+            <span class="text-xs text-muted uppercase tracking-widest">Scroll</span>
+            <svg class="w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="bg-darker border-y border-white/5 py-4 overflow-hidden">
+        <div class="flex whitespace-nowrap">
+            <div class="marquee flex gap-12 items-center font-heading text-3xl text-white/20 tracking-wider">
+                <span>HIP-HOP</span><span>·</span>
+                <span>FREESTYLE</span><span>·</span>
+                <span>CHOREOGRAPHY</span><span>·</span>
+                <span>STREET DANCE</span><span>·</span>
+                <span>WAKE-UP</span><span>·</span>
+                <span>HIP-HOP</span><span>·</span>
+                <span>FREESTYLE</span><span>·</span>
+                <span>CHOREOGRAPHY</span><span>·</span>
+                <span>STREET DANCE</span><span>·</span>
+                <span>WAKE-UP</span><span>·</span>
+                <span>HIP-HOP</span><span>·</span>
+                <span>FREESTYLE</span><span>·</span>
+                <span>CHOREOGRAPHY</span><span>·</span>
+                <span>STREET DANCE</span><span>·</span>
+                <span>WAKE-UP</span><span>·</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about" class="py-24 sm:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <p class="text-xs uppercase tracking-[0.3em] text-muted mb-4">О нас</p>
+                    <h2 class="font-heading text-5xl sm:text-6xl mb-8 leading-tight">
+                        ПРОСНИСь<br>ТВОРИТЬ
+                    </h2>
+                    <div class="space-y-6 text-white/70 leading-relaxed">
+                        <p class="text-lg font-light">
+                            Команда <strong class="text-white">WAKE-UP</strong> родилась в 2016 году. На протяжении всего времени мы становились призёрами чемпионатов, но главное — мы <strong class="text-white">возделываем культуру современного уличного танца</strong> в Уссурийске.
+                        </p>
+                        <p>
+                            Мы посвящаем свою жизнь осознанному творчеству. Ищем хип-хоп музыку с чистыми текстами. Делаем проекты, которые касаются сердец — и зрителей, и участников.
+                        </p>
+                        <blockquote class="border-l-2 border-white/20 pl-5 italic text-white/50 py-2">
+                            «Wake-up — проснись. Это не просто название, это призыв быть здесь и сейчас.»
+                        </blockquote>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/10">
+                        <div>
+                            <p class="font-heading text-4xl text-white">9+</p>
+                            <p class="text-sm text-muted mt-1">лет опыта</p>
+                        </div>
+                        <div>
+                            <p class="font-heading text-4xl text-white">∞</p>
+                            <p class="text-sm text-muted mt-1">страсть к танцу</p>
+                        </div>
+                        <div>
+                            <p class="font-heading text-4xl text-white">Усс</p>
+                            <p class="text-sm text-muted mt-1">Уссурийск</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal relative">
+                    <div class="img-hover rounded-xl overflow-hidden border border-white/10">
+                        <img src="images/studio.jpg"
+                             alt="Студия WAKE-UP — Уссурийск, Тимирязева 59"
+                             class="w-full h-[500px] object-cover"
+                             loading="lazy">
+                    </div>
+                    <div class="absolute -bottom-4 -left-4 bg-gold text-dark px-4 py-2 text-xs uppercase tracking-wider font-semibold rounded">
+                        Уссурийск · Наша студия
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIRECTIONS -->
+    <section id="directions" class="py-24 sm:py-32 bg-darker">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal text-center mb-16">
+                <p class="text-xs uppercase tracking-[0.3em] text-muted mb-4">Направления</p>
+                <h2 class="font-heading text-5xl sm:text-6xl">ЧТО ПРЕПОДАЁМ</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Hip-Hop -->
+                <div class="reveal group relative bg-muted-dark rounded-xl overflow-hidden price-card p-8">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/[0.02] rounded-full -translate-y-1/2 translate-x-1/2 transition group-hover:bg-white/[0.04]"></div>
+                    <div class="relative">
+                        <div class="text-4xl mb-6">🎤</div>
+                        <h3 class="font-heading text-3xl mb-3">HIP-HOP</h3>
+                        <p class="text-muted leading-relaxed">
+                            Основа уличной культуры. Фристайл и хореография — учим чувствовать бит, создавать свой стиль и двигаться естественно.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Freestyle -->
+                <div class="reveal group relative bg-muted-dark rounded-xl overflow-hidden price-card p-8">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/[0.02] rounded-full -translate-y-1/2 translate-x-1/2 transition group-hover:bg-white/[0.04]"></div>
+                    <div class="relative">
+                        <div class="text-4xl mb-6">🔥</div>
+                        <h3 class="font-heading text-3xl mb-3">FREESTYLE</h3>
+                        <p class="text-muted leading-relaxed">
+                            Свобода в каждом движении. Импровизация — это не отсутствие структуры, а высшее мастерство владения телом.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Choreography -->
+                <div class="reveal group relative bg-muted-dark rounded-xl overflow-hidden price-card p-8">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/[0.02] rounded-full -translate-y-1/2 translate-x-1/2 transition group-hover:bg-white/[0.04]"></div>
+                    <div class="relative">
+                        <div class="text-4xl mb-6">💃</div>
+                        <h3 class="font-heading text-3xl mb-3">Хореография</h3>
+                        <p class="text-muted leading-relaxed">
+                            Постановки и связки. Учимся работать в команде, выстраивать композицию и создавать зрелищные номера.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHILOSOPHY BANNER -->
+    <section class="relative py-32 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=1920&q=80"
+                 alt=""
+                 class="w-full h-full object-cover opacity-20"
+                 loading="lazy">
+            <div class="absolute inset-0 bg-dark/70"></div>
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto px-4 text-center reveal">
+            <p class="font-heading text-4xl sm:text-5xl md:text-6xl leading-tight">
+                «МЫ ДЕЛАЕМ ПРОЕКТЫ,<br>
+                КОТОРЫЕ <span class="text-white/50">КАСАЮТСЯ</span> СЕРДЕЦ»
+            </p>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="py-24 sm:py-32 bg-darker">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal text-center mb-16">
+                <p class="text-xs uppercase tracking-[0.3em] text-muted mb-4">Стоимость</p>
+                <h2 class="font-heading text-5xl sm:text-6xl">ЦЕНЫ</h2>
+                <p class="text-muted mt-4 max-w-lg mx-auto">Пробное занятие — всего 450₽. Приходите и ощутите атмосферу студии</p>
+            </div>
+
+            <!-- Group classes -->
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- GROUP -->
+                <div class="reveal bg-muted-dark rounded-xl overflow-hidden border border-white/5">
+                    <div class="p-8">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">👥</div>
+                            <h3 class="font-heading text-2xl tracking-wider">ГРУППОВЫЕ</h3>
+                        </div>
+                        <p class="text-sm text-muted mb-8">Занятия в группах разных уровней</p>
+
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center py-3 border-b border-white/5">
+                                <span class="text-white/80">Пробное занятие</span>
+                                <span class="font-medium text-white">450 ₽</span>
+                            </div>
+                            <div class="flex justify-between items-center py-3 border-b border-white/5">
+                                <span class="text-white/80">Разовое занятие</span>
+                                <span class="font-medium text-white">900 ₽</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-5 bg-white/[0.03] rounded-lg">
+                            <p class="text-sm text-muted mb-4">Абонементы (4 недели)</p>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-white/70">4 занятия</span>
+                                    <span class="font-medium text-white">3 200 ₽</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-white/70">8 занятий (60 мин)</span>
+                                    <span class="font-medium text-white">4 600 ₽</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-white/70">8 занятий (75 мин)</span>
+                                    <span class="font-medium text-white">4 800 ₽</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INDIVIDUAL -->
+                <div class="reveal bg-muted-dark rounded-xl overflow-hidden border-2 border-white/20">
+                    <div class="bg-white/5 px-8 py-2 text-center">
+                        <span class="text-xs uppercase tracking-wider text-muted">Индивидуальные занятия</span>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">⭐</div>
+                            <h3 class="font-heading text-2xl tracking-wider">ИНДИВИД</h3>
+                        </div>
+                        <p class="text-sm text-muted mb-8">Персональная работа с преподавателем</p>
+
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center py-3 border-b border-white/5">
+                                <div>
+                                    <span class="text-white/80 block">45 минут</span>
+                                    <span class="text-sm text-white/40">Индивидуальное</span>
+                                </div>
+                                <span class="text-2xl font-heading text-white">1 600 ₽</span>
+                            </div>
+                            <div class="flex justify-between items-center py-3 border-b border-white/5">
+                                <div>
+                                    <span class="text-white/80 block">60 минут</span>
+                                    <span class="text-sm text-white/40">Индивидуальное</span>
+                                </div>
+                                <span class="text-2xl font-heading text-white">1 800 ₽</span>
+                            </div>
+                        </div>
+
+                        <a href="https://t.me/wakeupsquad" target="_blank"
+                           class="mt-8 block text-center bg-gold text-dark py-3 text-sm font-semibold uppercase tracking-wider rounded-lg hover:bg-accent-light transition">
+                            Записаться
+                        </a>
+                    </div>
+                </div>
+
+                <!-- EXTRAS -->
+                <div class="reveal bg-muted-dark rounded-xl overflow-hidden border border-white/5">
+                    <div class="p-8">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">📋</div>
+                            <h3 class="font-heading text-2xl tracking-wider">ДОПОЛНИТЕЛЬНО</h3>
+                        </div>
+                        <p class="text-sm text-muted mb-8">Разовые и специальные услуги</p>
+
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center py-3 border-b border-white/5">
+                                <span class="text-white/80 text-sm">Доп. групповое занятие</span>
+                                <span class="font-medium text-white">450 ₽</span>
+                            </div>
+                            <div class="flex justify-between items-start py-3 border-b border-white/5">
+                                <span class="text-white/80 text-sm">Доп. репетиция к концерту / выход преподавателя на конкурс</span>
+                                <span class="font-medium text-white whitespace-nowrap ml-4">450 ₽</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-5 bg-white/[0.03] rounded-lg">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">🏢</div>
+                                <h3 class="font-heading text-xl tracking-wider">АРЕНДА ЗАЛА</h3>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-white/70 text-sm">Аренда зала</span>
+                                <span class="text-2xl font-heading text-white">900 ₽<span class="text-sm text-muted">/ч</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="py-24 sm:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal text-center mb-16">
+                <p class="text-xs uppercase tracking-[0.3em] text-muted mb-4">Галерея</p>
+                <h2 class="font-heading text-5xl sm:text-6xl">АТМОСФЕРА</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 reveal">
+                <div class="img-hover rounded-lg overflow-hidden row-span-2">
+                    <img src="https://images.unsplash.com/photo-1535525153412-1a635e4cdc67?w=600&q=80"
+                         alt="Танцы"
+                         class="w-full h-full object-cover min-h-[400px]"
+                         loading="lazy">
+                </div>
+                <div class="img-hover rounded-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1545959588-bb3603d90665?w=600&q=80"
+                         alt="Уличные танцы"
+                         class="w-full h-48 sm:h-56 object-cover"
+                         loading="lazy">
+                </div>
+                <div class="img-hover rounded-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=600&q=80"
+                         alt="Хип-хоп"
+                         class="w-full h-48 sm:h-56 object-cover"
+                         loading="lazy">
+                </div>
+                <div class="img-hover rounded-lg overflow-hidden row-span-2">
+                    <img src="https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?w=600&q=80"
+                         alt="Танцевальная студия"
+                         class="w-full h-full object-cover min-h-[400px]"
+                         loading="lazy">
+                </div>
+                <div class="img-hover rounded-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1516475429286-465d18b6da91?w=600&q=80"
+                         alt="Тренировка"
+                         class="w-full h-48 sm:h-56 object-cover"
+                         loading="lazy">
+                </div>
+                <div class="img-hover rounded-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?w=600&q=80"
+                         alt="Выступление"
+                         class="w-full h-48 sm:h-56 object-cover"
+                         loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section id="reviews" class="py-24 sm:py-32 bg-darker">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal text-center mb-16">
+                <p class="text-xs uppercase tracking-[0.3em] text-muted mb-4">Отзывы</p>
+                <h2 class="font-heading text-5xl sm:text-6xl">ЧТО ГОВОРЯТ</h2>
+            </div>
+
+            <div class="reveal bg-muted-dark rounded-xl p-8 sm:p-12 border border-white/5 relative">
+                <div class="absolute top-6 left-6 text-6xl text-white/5 font-heading">"</div>
+                <blockquote class="text-lg sm:text-xl text-white/80 leading-relaxed relative">
+                    Очень отзывчивые тренеры, любят танец и детей, прям на одной волне с молодежью. Атмосфера в студии очень дружелюбная, хочется возвращаться.
+                </blockquote>
+                <div class="mt-8 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                        <span class="text-lg">💬</span>
+                    </div>
+                    <div>
+                        <p class="text-white font-medium">Ученик студии</p>
+                        <p class="text-sm text-muted">WAKE-UP, Уссурийск</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA - CONTACT -->
+    <section id="contact" class="py-24 sm:py-32 relative overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="images/studio.jpg"
+                 alt=""
+                 class="w-full h-full object-cover opacity-15"
+                 loading="lazy">
+            <div class="absolute inset-0 bg-dark/85"></div>
+        </div>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <p class="text-xs uppercase tracking-[0.3em] text-muted mb-4">Контакты</p>
+            <h2 class="font-heading text-5xl sm:text-6xl md:text-7xl mb-6">
+                ПРИСОЕДИНЯЙСЯ<br>К НАМ
+            </h2>
+            <p class="text-white/60 text-lg mb-12 max-w-lg mx-auto">
+                Первое пробное занятие — всего 450₽. Приходи, попробуй, почувствуй
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="https://t.me/wakeupsquad" target="_blank"
+                   class="inline-flex items-center gap-3 bg-gold text-dark px-8 py-4 text-sm font-semibold uppercase tracking-wider hover:bg-accent-light transition rounded-lg">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    Написать в Telegram
+                </a>
+                <a href="tel:+79094514407"
+                   class="inline-flex items-center gap-3 border border-white/20 px-8 py-4 text-sm uppercase tracking-wider hover:border-white/50 hover:bg-white/5 transition rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                    Позвонить
+                </a>
+            </div>
+
+            <div class="mt-16 grid sm:grid-cols-3 gap-8 text-center">
+                <div class="p-6 bg-white/5 rounded-lg backdrop-blur-sm">
+                    <p class="text-2xl mb-2">📍</p>
+                    <p class="text-white font-medium">Адрес</p>
+                    <p class="text-sm text-white/50 mt-1">Уссурийск, Тимирязева 59, 2 этаж</p>
+                </div>
+                <div class="p-6 bg-white/5 rounded-lg backdrop-blur-sm">
+                    <p class="text-2xl mb-2">📱</p>
+                    <p class="text-white font-medium">Телефон</p>
+                    <a href="tel:+79094514407" class="text-sm text-white/50 mt-1 block hover:text-white transition">8 (909) 451-44-07</a>
+                </div>
+                <div class="p-6 bg-white/5 rounded-lg backdrop-blur-sm">
+                    <p class="text-2xl mb-2">📸</p>
+                    <p class="text-white font-medium">Instagram</p>
+                    <a href="https://www.instagram.com/wake_up_squad" target="_blank" class="text-sm text-white/50 mt-1 block hover:text-white transition">@wake_up_squad</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-4">
+                    <span class="font-heading text-2xl tracking-widest">WAKE-UP</span>
+                    <span class="text-sm text-muted">© 2016–2026</span>
+                </div>
+                <div class="flex gap-6">
+                    <a href="https://t.me/wakeupsquad" target="_blank" class="text-muted hover:text-white transition text-sm">Telegram</a>
+                    <a href="https://www.instagram.com/wake_up_squad" target="_blank" class="text-muted hover:text-white transition text-sm">Instagram</a>
+                    <a href="tel:+79094514407" class="text-muted hover:text-white transition text-sm">8 (909) 451-44-07</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const revObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); } });
+        }, { threshold: 0.15 });
+        reveals.forEach(el => revObs.observe(el));
+
+        // Mobile menu
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenuBtn = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        const overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 bg-black/50 z-40 opacity-0 pointer-events-none transition';
+        document.body.appendChild(overlay);
+
+        function openMenu() { mobileMenu.classList.add('open'); overlay.classList.remove('opacity-0', 'pointer-events-none'); overlay.classList.add('opacity-100'); }
+        function closeMenu() { mobileMenu.classList.remove('open'); overlay.classList.add('opacity-0', 'pointer-events-none'); overlay.classList.remove('opacity-100'); }
+        menuBtn.addEventListener('click', openMenu);
+        closeMenuBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+        mobileLinks.forEach(l => l.addEventListener('click', closeMenu));
+
+        // Nav bg on scroll
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('border-white/10');
+                nav.classList.remove('border-white/5');
+            } else {
+                nav.classList.remove('border-white/10');
+                nav.classList.add('border-white/5');
+            }
+        });
+    </script>
+</body>
+</html>
